@@ -166,40 +166,40 @@ L’application KeyStorage présente plusieurs configurations dangereuses au niv
 
 ### 1. Activités SecretList et FileSelector
 
-Code initial :"<activity android:name=".SecretList" android:exported="true" />"
+Code initial :"activity android:name=".SecretList" android:exported="true" /"
 
 Code corrigé :
-    "<activity android:name=".SecretList" android:exported="false" />"
+    "activity android:name=".SecretList" android:exported="false" /"
 
 ### 2. Fournisseur InternalProvider
 
 Code initial :
-    "<provider android:name=".InternalProvider" android:exported="true" />"
+    "provider android:name=".InternalProvider" android:exported="true" "
 
 Code corrigé :
-    "<provider
+    provider
         android:name=".InternalProvider"
         android:exported="true"
         android:readPermission="com.keystorage.securebox.READ_KEYS"
-        android:writePermission="com.keystorage.securebox.WRITE_KEYS" />"
+        android:writePermission="com.keystorage.securebox.WRITE_KEYS" "
 
 ### 3. Services GateService et CodecService
 
 Code initial :
-    "<service android:name=".GateService" android:exported="true" />"
+    "service android:name=".GateService" android:exported="true" /"
 
 Code corrigé :
-    "<service
+    "service
         android:name=".GateService"
-        android:exported="false" />"
+        android:exported="false" "
 
 ### 4. Balise application
 
 Code initial :
-    "<application android:debuggable="true" android:allowBackup="true" />"
+    "application android:debuggable="true" android:allowBackup="true" /"
 
 Code corrigé :
-    "<application android:debuggable="false" android:allowBackup="false" />"
+    application android:debuggable="false" android:allowBackup="false" "
 
 ### 5. Permissions – passage au niveau signature
 
