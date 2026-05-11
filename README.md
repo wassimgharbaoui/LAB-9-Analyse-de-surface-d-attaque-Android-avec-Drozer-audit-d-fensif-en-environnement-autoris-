@@ -32,7 +32,8 @@ L’application KeyStorage présente plusieurs configurations dangereuses au niv
 
 ## Étape 1 – Préparation du poste de travail
 
-![](./drozer/4.png)
+<img width="327" height="641" alt="Screenshot 2026-05-11 190722" src="https://github.com/user-attachments/assets/db138d17-350e-49df-a39f-e466482d87d6" />
+
 
     adb install drozer-agent-3.2.1.apk   → OK
     adb install keystorage.apk           → OK
@@ -42,7 +43,8 @@ L’application KeyStorage présente plusieurs configurations dangereuses au niv
 
 ## Étape 2 – Connexion à la console Drozer
 
-![](./drozer/5.png)
+<img width="805" height="402" alt="Screenshot 2026-05-11 190729" src="https://github.com/user-attachments/assets/3d5a2b67-39bc-40ba-9877-6ff56e567482" />
+
 
     drozer console connect
     Appareil sélectionné : emu-5556 (Android 12 - API 31)
@@ -53,13 +55,15 @@ L’application KeyStorage présente plusieurs configurations dangereuses au niv
 
 ## Étape 3 – Inventaire des composants exposés
 
-![](./drozer/9.png)
+<img width="816" height="331" alt="Screenshot 2026-05-11 190735" src="https://github.com/user-attachments/assets/70f69936-75ee-4816-aaa3-05adbeaeb55c" />
+
 
 ### Activités exportées
 
     dz> run app.activity.info -a com.keystorage.securebox
 
-![](./drozer/15.png)
+<img width="635" height="252" alt="Screenshot 2026-05-11 190739" src="https://github.com/user-attachments/assets/b12d5173-c817-4e78-ae4a-84b2462f96ba" />
+
 
 | Activité | Protection |
 |----------|------------|
@@ -71,7 +75,8 @@ L’application KeyStorage présente plusieurs configurations dangereuses au niv
 
     dz> run app.service.info -a com.keystorage.securebox
 
-![](./drozer/11.png)
+<img width="605" height="148" alt="Screenshot 2026-05-11 190744" src="https://github.com/user-attachments/assets/0a49d9b5-71c6-48d2-aa21-a0303d04694d" />
+
 
 | Service | Permission requise |
 |---------|--------------------|
@@ -82,7 +87,8 @@ L’application KeyStorage présente plusieurs configurations dangereuses au niv
 
     dz> run app.broadcast.info -a com.keystorage.securebox
 
-![](./drozer/12.png)
+<img width="691" height="115" alt="Screenshot 2026-05-11 190747" src="https://github.com/user-attachments/assets/5ee971ff-c75c-4f0c-b051-1c69bb6eeeb2" />
+
 
 | Récepteur | Niveau de permission |
 |-----------|----------------------|
@@ -92,7 +98,8 @@ L’application KeyStorage présente plusieurs configurations dangereuses au niv
 
     dz> run app.provider.info -a com.keystorage.securebox
 
-![](./drozer/13.png)
+<img width="865" height="543" alt="Screenshot 2026-05-11 190753" src="https://github.com/user-attachments/assets/07b2074c-1b8e-45ed-b703-c506132ede15" />
+
 
 | Fournisseur | Lecture | Écriture |
 |-------------|---------|----------|
@@ -106,8 +113,8 @@ L’application KeyStorage présente plusieurs configurations dangereuses au niv
 ### Extraction du manifeste
 
     dz> run app.package.manifest com.keystorage.securebox
+<img width="887" height="781" alt="Screenshot 2026-05-11 190808" src="https://github.com/user-attachments/assets/6794b2f6-c257-4b96-a773-41e15e120b44" />
 
-![](./drozer/14.png)
 
 **Anomalies relevées :**
 - `debuggable="true"` → non conforme pour une release
@@ -118,7 +125,8 @@ L’application KeyStorage présente plusieurs configurations dangereuses au niv
 
     dz> run scanner.provider.finduris -a com.keystorage.securebox
 
-![](./drozer/16.png)
+<img width="881" height="322" alt="Screenshot 2026-05-11 190813" src="https://github.com/user-attachments/assets/674349d4-e1c5-46a3-a8da-e326dc0d3760" />
+
 
 **Chemins accessibles sans permission :**
 
@@ -158,41 +166,40 @@ L’application KeyStorage présente plusieurs configurations dangereuses au niv
 
 ### 1. Activités SecretList et FileSelector
 
-Code initial :
-    <activity android:name=".SecretList" android:exported="true" />
+Code initial :"<activity android:name=".SecretList" android:exported="true" />"
 
 Code corrigé :
-    <activity android:name=".SecretList" android:exported="false" />
+    "<activity android:name=".SecretList" android:exported="false" />"
 
 ### 2. Fournisseur InternalProvider
 
 Code initial :
-    <provider android:name=".InternalProvider" android:exported="true" />
+    "<provider android:name=".InternalProvider" android:exported="true" />"
 
 Code corrigé :
-    <provider
+    "<provider
         android:name=".InternalProvider"
         android:exported="true"
         android:readPermission="com.keystorage.securebox.READ_KEYS"
-        android:writePermission="com.keystorage.securebox.WRITE_KEYS" />
+        android:writePermission="com.keystorage.securebox.WRITE_KEYS" />"
 
 ### 3. Services GateService et CodecService
 
 Code initial :
-    <service android:name=".GateService" android:exported="true" />
+    "<service android:name=".GateService" android:exported="true" />"
 
 Code corrigé :
-    <service
+    "<service
         android:name=".GateService"
-        android:exported="false" />
+        android:exported="false" />"
 
 ### 4. Balise application
 
 Code initial :
-    <application android:debuggable="true" android:allowBackup="true" />
+    "<application android:debuggable="true" android:allowBackup="true" />"
 
 Code corrigé :
-    <application android:debuggable="false" android:allowBackup="false" />
+    "<application android:debuggable="false" android:allowBackup="false" />"
 
 ### 5. Permissions – passage au niveau signature
 
@@ -229,4 +236,4 @@ Code corrigé :
 - [x] Aucune donnée personnelle réelle n'apparaît dans ce document
 - [x] La structure du rapport est claire et homogène
 
-**Indice pour le placement des images :** Les fichiers image sont nommés `4.png`, `5.png`, `9.png`, `15.png`, `11.png`, `12.png`, `13.png`, `14.png`, `16.png`. Déposez-les dans le dossier `./drozer/` en respectant exactement ces noms. L'ordre d'apparition dans le document correspond à l'ordre de lecture.
+
